@@ -6,6 +6,8 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.media.AudioManager;
+import android.media.SoundPool;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -15,12 +17,20 @@ import android.view.View;
 import android.widget.RadioButton;
 import android.widget.Toast;
 
-public class SingleplayerActivity extends ActionBarActivity  implements SensorEventListener {
+public class SingleplayerActivity extends ActionBarActivity  implements SensorEventListener{
 
     private SensorManager senSensorManager;
     private Sensor senAccelerometer;
     public boolean switchCase = false;
     public int counter;
+
+    public SoundPool pool;
+    public int gestureCompleate;
+    public int lossSound;
+    public int winSound;
+    public int tieSound;
+    boolean isloaded = false;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,6 +40,21 @@ public class SingleplayerActivity extends ActionBarActivity  implements SensorEv
         senSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         senAccelerometer = senSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         senSensorManager.registerListener(this, senAccelerometer, SensorManager.SENSOR_DELAY_NORMAL);
+
+        pool = new SoundPool(10, AudioManager.STREAM_MUSIC, 0);
+        pool.setOnLoadCompleteListener(new SoundPool.OnLoadCompleteListener() {
+            @Override
+            public void onLoadComplete(SoundPool soundPool, int sampleId, int status) {
+                isloaded = true;
+            }
+        });
+
+        gestureCompleate = pool.load(this, R.raw.gesturecompleate, 1);
+        lossSound = pool.load(this, R.raw.youloss, 1);
+        tieSound = pool.load(this, R.raw.youtie, 1);
+        winSound = pool.load(this, R.raw.youwin, 1);
+
+
     }
 
     @Override
@@ -70,6 +95,7 @@ public class SingleplayerActivity extends ActionBarActivity  implements SensorEv
 
                 }else if (x < 1.5 & switchCase){
                     counter += 1;
+                    pool.play(gestureCompleate,  1, 1, 1, 0, 1);
                     Toast.makeText(this, "SHAKE: " + Integer.toString(counter), Toast.LENGTH_SHORT).show();
                     if (counter == 3){
                         Log.d("GAME PLAYED", Integer.toString(counter));
@@ -118,12 +144,15 @@ public class SingleplayerActivity extends ActionBarActivity  implements SensorEv
 
         switch (GameHub.RESULT) {
             case GameHub.WIN:
+                pool.play(winSound,  1, 1, 1, 0, 1);
                 Toast.makeText(this, "YOU ARE WINNER!!!!!!", Toast.LENGTH_SHORT).show();
                 break;
             case GameHub.TIE:
+                pool.play(tieSound,  1, 1, 1, 0, 1);
                 Toast.makeText(this, "YOU TIE WITH COMPUTER", Toast.LENGTH_SHORT).show();
                 break;
             case GameHub.LOSS:
+                pool.play(lossSound,  1, 1, 1, 0, 1);
                 Toast.makeText(this, "YOU LOSE SORRY", Toast.LENGTH_SHORT).show();
                 break;
         }
