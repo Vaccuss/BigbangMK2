@@ -80,6 +80,7 @@ public class SingleplayerActivity extends ActionBarActivity  implements SensorEv
                     Toast.makeText(this, "SHAKE: " + Integer.toString(counter), Toast.LENGTH_SHORT).show();
                     if (counter == 3){
                         Log.d("GAME PLAYED", Integer.toString(counter));
+                        gameChoice();
                        counter = 0;
                     }
                     switchCase = false;
@@ -145,8 +146,8 @@ public class SingleplayerActivity extends ActionBarActivity  implements SensorEv
                 break;
             case GameHub.TIE:
                 Toast.makeText(this, "YOU TIE WITH COMPUTER", Toast.LENGTH_SHORT).show();
-            default:
-                Toast.makeText(this, "COMPUTER BEAT YOU!!!!!", Toast.LENGTH_SHORT).show();
+            case GameHub.LOSS:
+                Toast.makeText(this, "YOU LOOSE SORRY", Toast.LENGTH_SHORT).show();
         }
     }
 
