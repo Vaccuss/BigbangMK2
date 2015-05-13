@@ -29,11 +29,6 @@
         </activity>
 
         <receiver
-            android:name=".WiFiDirectBroadcastReceiver"
-            android:enabled="true"
-            android:exported="true" >
-        </receiver>
-        <receiver
             android:name=".MyReceiver"
             android:enabled="true"
             android:exported="true" >
@@ -50,6 +45,10 @@
         <activity
             android:name=".Highscore"
             android:label="@string/title_activity_highscore" >
+        </activity>
+        <activity
+            android:name=".GameResult"
+            android:label="@string/title_activity_game_result" >
         </activity>
     </application>
 

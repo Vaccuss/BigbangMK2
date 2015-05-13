@@ -4,15 +4,16 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     android:paddingBottom="@dimen/activity_vertical_margin"
-    tools:context="com.example.dean.bigbangmk2.SingleplayerActivity">
+    tools:context="com.example.dean.bigbangmk2.SingleplayerActivity"
+    android:id="@+id/">
 
     <RadioGroup xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_width="fill_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/radioGroup"
         android:orientation="vertical"
-        android:layout_below="@+id/textView"
-        android:layout_alignParentStart="true">
+        android:layout_below="@+id/textView3"
+        android:layout_alignStart="@+id/button">
 
         <RadioButton
             android:layout_width="wrap_content"
@@ -58,16 +59,26 @@
         android:onClick="playGame"
         android:layout_below="@+id/radioGroup"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="114dp" />
+        android:layout_marginTop="32dp" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Single Player Zone: Test your skils here!"
+        android:text="Single Player Zone: Test your skills here!"
         android:id="@+id/textView"
         android:layout_alignParentTop="true"
         android:layout_toStartOf="@+id/button"
         android:layout_alignParentEnd="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="What is your choice?"
+        android:id="@+id/textView3"
+        android:layout_marginTop="41dp"
+        android:layout_below="@+id/textView"
+        android:layout_centerHorizontal="true" />
 
 </RelativeLayout>
