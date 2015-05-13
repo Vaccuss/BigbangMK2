@@ -60,7 +60,7 @@ public class SingleplayerActivity extends ActionBarActivity  implements SensorEv
 
         Sensor mySensor = sensorEvent.sensor;
         if (GameHub.getUserChoice() == GameHub.NO_SELECTION){
-            return;
+            Log.d("Not used", "");
         }else {
             if (mySensor.getType() == Sensor.TYPE_ACCELEROMETER) {
                 long localStamp = System.currentTimeMillis();
