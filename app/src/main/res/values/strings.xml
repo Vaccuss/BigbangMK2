@@ -1,0 +1,34 @@
+<resources>
+    <string name="app_name">Big Bang Game</string>
+    <string name="action_settings">Settings</string>
+    <string name="hello_world">hello_world</string>
+
+
+    //Main Activity
+    <string name="SinglePlayer">Single Player Zone</string>
+    <string name="MultiPlayer">Multiplayer Arena!!</string>
+    <string name="Score">Your High Scores</string>
+    <string name="Title">Big Bang Theory: Rock, Paper, Lizard, Spock Game!!</string>
+
+
+
+
+    //Multiplayer Activity
+    <string name="Discover">Get Challenger</string>
+    <string name="holder">hello_world</string>
+
+
+
+    //Single player activity
+    <string name="Rock">ROCK</string>
+    <string name="Paper">PAPER</string>
+    <string name="Scissors">SCISSORS</string>
+    <string name="Lizard">Lizard</string>
+    <string name="Spock">Spock</string>
+    <string name="Button">Play Game</string>
+    <string name="title_activity_multiplayer">MultiplayerActivity</string>
+    <string name="title_activity_singleplayer">SingleplayerActivity</string>
+    <string name="title_activity_highscore">Highscore</string>
+
+
+</resources>
