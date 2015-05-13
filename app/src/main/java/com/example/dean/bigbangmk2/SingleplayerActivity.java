@@ -1,7 +1,14 @@
 package com.example.dean.bigbangmk2;
 
+
+import android.content.Context;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -9,12 +16,26 @@ import android.widget.RadioButton;
 import android.widget.Toast;
 
 
-public class SingleplayerActivity extends ActionBarActivity {
+public class SingleplayerActivity extends ActionBarActivity  implements SensorEventListener {
+
+    private SensorManager senSensorManager;
+    private Sensor senAccelerometer;
+    private long lastUpdate = 0;
+    private float last_x, last_y, last_z;
+    private static final int SHAKE_THRESHOLD = 600;
+    public boolean switchCase = false;
+    public int counter;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_singleplayer);
+
+        senSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
+        senAccelerometer = senSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+        senSensorManager.registerListener(this, senAccelerometer, SensorManager.SENSOR_DELAY_NORMAL);
     }
 
 
@@ -39,6 +60,41 @@ public class SingleplayerActivity extends ActionBarActivity {
 
         return super.onOptionsItemSelected(item);
     }
+
+    @Override
+    public void onSensorChanged(SensorEvent sensorEvent) {
+
+        Sensor mySensor = sensorEvent.sensor;
+        if (GameHub.getUserChoice() == GameHub.NO_SELECTION){
+
+        }else {
+            if (mySensor.getType() == Sensor.TYPE_ACCELEROMETER) {
+                long localStamp = System.currentTimeMillis();
+                float x = sensorEvent.values[1];
+                if (x >= 8.0) {
+                    switchCase = true;
+                    // Log.d("THE X VALUE:", Float.toString(x));
+
+                }else if (x < 1.5 & switchCase){
+                    counter += 1;
+                    Toast.makeText(this, "SHAKE: " + Integer.toString(counter), Toast.LENGTH_SHORT).show();
+                    if (counter == 3){
+                        Log.d("GAME PLAYED", Integer.toString(counter));
+                       counter = 0;
+                    }
+                    switchCase = false;
+                }
+
+            }
+        }
+
+    }
+
+    @Override
+    public void onAccuracyChanged(Sensor sensor, int accuracy) {
+
+    }
+
 
     public void setPlayerChoice(View view) {
         boolean checked = ((RadioButton) view).isChecked();
@@ -73,20 +129,26 @@ public class SingleplayerActivity extends ActionBarActivity {
         if (GameHub.getUserChoice() == GameHub.NO_SELECTION) {
             Toast.makeText(this, "Please Guess", Toast.LENGTH_LONG).show();
         } else {
-            GameHub.compare(GameHub.AiGuess());
-            Toast.makeText(this, "Computer is thinking", Toast.LENGTH_SHORT).show();
-
-            switch (GameHub.RESULT) {
-                case GameHub.WIN:
-                    Toast.makeText(this, "YOU ARE WINNER!!!!!!", Toast.LENGTH_LONG).show();
-                    break;
-                case GameHub.TIE:
-                    Toast.makeText(this, "YOU TIE WITH COMPUTER", Toast.LENGTH_LONG).show();
-                default:
-                    Toast.makeText(this, "COMPUTER BEAT YOU!!!!!", Toast.LENGTH_LONG).show();
-            }
+            gameChoice();
 
         }
 
     }
+
+    public void gameChoice() {
+        GameHub.compare(GameHub.AiGuess());
+        Toast.makeText(this, "Computer is thinking", Toast.LENGTH_SHORT).show();
+
+        switch (GameHub.RESULT) {
+            case GameHub.WIN:
+                Toast.makeText(this, "YOU ARE WINNER!!!!!!", Toast.LENGTH_LONG).show();
+                break;
+            case GameHub.TIE:
+                Toast.makeText(this, "YOU TIE WITH COMPUTER", Toast.LENGTH_LONG).show();
+            default:
+                Toast.makeText(this, "COMPUTER BEAT YOU!!!!!", Toast.LENGTH_LONG).show();
+        }
+    }
+
+
 }
