@@ -1,6 +1,5 @@
 package com.example.dean.bigbangmk2;
 
-
 import android.content.Context;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
@@ -87,7 +86,6 @@ public class SingleplayerActivity extends ActionBarActivity  implements SensorEv
             Log.d("Not used", "");
         }else {
             if (mySensor.getType() == Sensor.TYPE_ACCELEROMETER) {
-                long localStamp = System.currentTimeMillis();
                 float x = sensorEvent.values[1];
                 if (x >= 8.0) {
                     switchCase = true;
