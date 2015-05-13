@@ -19,7 +19,6 @@ public class SingleplayerActivity extends ActionBarActivity  implements SensorEv
 
     private SensorManager senSensorManager;
     private Sensor senAccelerometer;
-    private float last_x;
     public boolean switchCase = false;
     public int counter;
 
