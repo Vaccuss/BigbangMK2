@@ -15,18 +15,13 @@ import android.view.View;
 import android.widget.RadioButton;
 import android.widget.Toast;
 
-
 public class SingleplayerActivity extends ActionBarActivity  implements SensorEventListener {
 
     private SensorManager senSensorManager;
     private Sensor senAccelerometer;
-    private long lastUpdate = 0;
-    private float last_x, last_y, last_z;
-    private static final int SHAKE_THRESHOLD = 600;
+    private float last_x;
     public boolean switchCase = false;
     public int counter;
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,7 +32,6 @@ public class SingleplayerActivity extends ActionBarActivity  implements SensorEv
         senAccelerometer = senSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         senSensorManager.registerListener(this, senAccelerometer, SensorManager.SENSOR_DELAY_NORMAL);
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -91,12 +85,6 @@ public class SingleplayerActivity extends ActionBarActivity  implements SensorEv
 
     }
 
-    @Override
-    public void onAccuracyChanged(Sensor sensor, int accuracy) {
-
-    }
-
-
     public void setPlayerChoice(View view) {
         boolean checked = ((RadioButton) view).isChecked();
 
@@ -125,17 +113,6 @@ public class SingleplayerActivity extends ActionBarActivity  implements SensorEv
 
     }
 
-
-    public void playGame(View view) {
-        if (GameHub.getUserChoice() == GameHub.NO_SELECTION) {
-            Toast.makeText(this, "Please Guess", Toast.LENGTH_LONG).show();
-        } else {
-            gameChoice();
-
-        }
-
-    }
-
     public void gameChoice() {
         GameHub.compare(GameHub.AiGuess());
         Toast.makeText(this, "Computer is thinking", Toast.LENGTH_SHORT).show();
@@ -146,10 +123,26 @@ public class SingleplayerActivity extends ActionBarActivity  implements SensorEv
                 break;
             case GameHub.TIE:
                 Toast.makeText(this, "YOU TIE WITH COMPUTER", Toast.LENGTH_SHORT).show();
+                break;
             case GameHub.LOSS:
-                Toast.makeText(this, "YOU LOOSE SORRY", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "YOU LOSE SORRY", Toast.LENGTH_SHORT).show();
+                break;
         }
     }
 
+    @Override
+    public void onAccuracyChanged(Sensor sensor, int accuracy) {
+
+    }
+
+    public void playGame(View view) {
+        if (GameHub.getUserChoice() == GameHub.NO_SELECTION) {
+            Toast.makeText(this, "Please Guess", Toast.LENGTH_LONG).show();
+        } else {
+            gameChoice();
+
+        }
+
+    }
 
 }
