@@ -66,7 +66,7 @@ public class SingleplayerActivity extends ActionBarActivity  implements SensorEv
 
         Sensor mySensor = sensorEvent.sensor;
         if (GameHub.getUserChoice() == GameHub.NO_SELECTION){
-
+            return;
         }else {
             if (mySensor.getType() == Sensor.TYPE_ACCELEROMETER) {
                 long localStamp = System.currentTimeMillis();
@@ -141,12 +141,12 @@ public class SingleplayerActivity extends ActionBarActivity  implements SensorEv
 
         switch (GameHub.RESULT) {
             case GameHub.WIN:
-                Toast.makeText(this, "YOU ARE WINNER!!!!!!", Toast.LENGTH_LONG).show();
+                Toast.makeText(this, "YOU ARE WINNER!!!!!!", Toast.LENGTH_SHORT).show();
                 break;
             case GameHub.TIE:
-                Toast.makeText(this, "YOU TIE WITH COMPUTER", Toast.LENGTH_LONG).show();
+                Toast.makeText(this, "YOU TIE WITH COMPUTER", Toast.LENGTH_SHORT).show();
             default:
-                Toast.makeText(this, "COMPUTER BEAT YOU!!!!!", Toast.LENGTH_LONG).show();
+                Toast.makeText(this, "COMPUTER BEAT YOU!!!!!", Toast.LENGTH_SHORT).show();
         }
     }
 
