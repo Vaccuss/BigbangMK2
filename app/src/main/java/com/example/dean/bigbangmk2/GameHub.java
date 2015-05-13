@@ -12,9 +12,7 @@ public class GameHub {
     public static final int SICSSOR = 3;
     public static final int LIZARD = 4;
     public static final int SPOCK = 5;
-
     public static int RESULT = NO_SELECTION;
-
     public static final int TIE = 0;
     public static final int WIN = 1;
     public static final int LOSS = 2;
