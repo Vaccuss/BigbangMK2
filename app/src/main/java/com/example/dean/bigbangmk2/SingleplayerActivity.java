@@ -30,7 +30,6 @@ public class SingleplayerActivity extends ActionBarActivity  implements SensorEv
     public int tieSound;
     boolean isloaded = false;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,7 +39,7 @@ public class SingleplayerActivity extends ActionBarActivity  implements SensorEv
         senAccelerometer = senSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         senSensorManager.registerListener(this, senAccelerometer, SensorManager.SENSOR_DELAY_NORMAL);
 
-        pool = new SoundPool(10, AudioManager.STREAM_MUSIC, 0);
+        pool = new SoundPool(2, AudioManager.STREAM_MUSIC, 0);
         pool.setOnLoadCompleteListener(new SoundPool.OnLoadCompleteListener() {
             @Override
             public void onLoadComplete(SoundPool soundPool, int sampleId, int status) {
@@ -55,8 +54,35 @@ public class SingleplayerActivity extends ActionBarActivity  implements SensorEv
 
 
     }
+    @Override
+    public void onPause() {
+        super.onPause();
+        pool.release();
+        pool = null;
+        senSensorManager.unregisterListener(this);
+
+    }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        senSensorManager.registerListener(this, senAccelerometer, SensorManager.SENSOR_DELAY_NORMAL);
+        pool = new SoundPool(2, AudioManager.STREAM_MUSIC, 0);
+        pool.setOnLoadCompleteListener(new SoundPool.OnLoadCompleteListener() {
+            @Override
+            public void onLoadComplete(SoundPool soundPool, int sampleId, int status) {
+                isloaded = true;
+            }
+        });
+
+        gestureCompleate = pool.load(this, R.raw.gesturecompleate, 1);
+        lossSound = pool.load(this, R.raw.youloss, 1);
+        tieSound = pool.load(this, R.raw.youtie, 1);
+        winSound = pool.load(this, R.raw.youwin, 1);
+
+    }
+
+        @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_singleplayer, menu);
@@ -138,8 +164,6 @@ public class SingleplayerActivity extends ActionBarActivity  implements SensorEv
 
     public void gameChoice() {
         GameHub.compare(GameHub.AiGuess());
-        Toast.makeText(this, "Computer is thinking", Toast.LENGTH_SHORT).show();
-
         switch (GameHub.RESULT) {
             case GameHub.WIN:
                 pool.play(winSound,  1, 1, 1, 0, 1);
