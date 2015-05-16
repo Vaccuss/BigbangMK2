@@ -1,17 +1,58 @@
 package com.example.dean.bigbangmk2;
 
+import android.content.Context;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
+import android.widget.TextView;
+
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 
 
 public class Highscore extends ActionBarActivity {
+
+    public ListView scoreList;
+    public ArrayList<String[]> players = new ArrayList<>();
+    public DatabaseOpenHelper databaseOpenHelper;
+    public SQLiteDatabase database;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_highscore);
+        scoreList = (ListView) findViewById(R.id.scoreList);
+        databaseOpenHelper = new DatabaseOpenHelper(this);
+
+        database = databaseOpenHelper.getWritableDatabase();
+
+        Cursor cursor = databaseOpenHelper.rankDatabase(database);
+        while (cursor.moveToNext()) {
+            String playerName = cursor.getString(0);
+            String wins = cursor.getString(1);
+            String losses = cursor.getString(2);
+            String totalGames = cursor.getString(3);
+            String winpercent = cursor.getString(4);
+            Log.i("INFO", winpercent);
+
+            String[] row = new String[]{playerName,wins,losses,totalGames};
+           players.add(row);
+        }
+        cursor.close();
+        database.close();
+
+        ScoreAdapter adapter = new ScoreAdapter(this, R.layout.score_item, players);
+        scoreList.setAdapter(adapter);
+
     }
 
 
@@ -35,5 +76,52 @@ public class Highscore extends ActionBarActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    class ScoreAdapter extends ArrayAdapter<String[]> {
+
+        ArrayList<String[]> players;
+
+        public ScoreAdapter(Context context, int resource, ArrayList<String[]> objects) {
+            super(context, resource, objects);
+            players = objects;
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            //return super.getView(position, convertView, parent);
+
+            View v = convertView;
+
+            if (v == null){
+                LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                v = inflater.inflate(R.layout.score_item, null);
+            }
+
+            String[] currentPlayer = players.get(position);
+
+            if (currentPlayer != null) {
+
+                Log.i("Adapter", position + "");
+
+                TextView rank = (TextView) v.findViewById(R.id.rank);
+                TextView name = (TextView) v.findViewById(R.id.name);
+                TextView win = (TextView) v.findViewById(R.id.win);
+                TextView loss = (TextView) v.findViewById(R.id.loss);
+                TextView total = (TextView) v.findViewById(R.id.totalScore);
+
+                Log.w("fs", (name == null ? "null" : "not"));
+
+                Log.i("entry:", currentPlayer[0]);
+
+                rank.setText((position + 1) + "");
+                name.setText(currentPlayer[0]);
+                win.setText(currentPlayer[1]);
+                loss.setText(currentPlayer[2]);
+                total.setText(currentPlayer[3]);
+            }
+
+            return v;
+        }
     }
 }

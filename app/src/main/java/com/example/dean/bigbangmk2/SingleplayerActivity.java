@@ -1,6 +1,7 @@
 package com.example.dean.bigbangmk2;
 
 import android.content.Context;
+import android.database.sqlite.SQLiteDatabase;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -29,6 +30,9 @@ public class SingleplayerActivity extends ActionBarActivity  implements SensorEv
     public int winSound;
     public int tieSound;
     boolean isloaded = false;
+
+    public DatabaseOpenHelper databaseOpenHelper;
+    public SQLiteDatabase database;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,7 +64,13 @@ public class SingleplayerActivity extends ActionBarActivity  implements SensorEv
         pool.release();
         pool = null;
         senSensorManager.unregisterListener(this);
-
+        databaseOpenHelper = new DatabaseOpenHelper(this);
+        database = databaseOpenHelper.getWritableDatabase();
+        databaseOpenHelper.upDatePlayer(database);
+        database.close();
+        GameHub.loss = 0;
+        GameHub.win = 0;
+        GameHub.playerName = "";
     }
 
     @Override
@@ -168,6 +178,7 @@ public class SingleplayerActivity extends ActionBarActivity  implements SensorEv
             case GameHub.WIN:
                 pool.play(winSound,  1, 1, 1, 0, 1);
                 Toast.makeText(this, "YOU ARE WINNER!!!!!!", Toast.LENGTH_SHORT).show();
+                GameHub.win = GameHub.win + 1;
                 break;
             case GameHub.TIE:
                 pool.play(tieSound,  1, 1, 1, 0, 1);
@@ -175,6 +186,7 @@ public class SingleplayerActivity extends ActionBarActivity  implements SensorEv
                 break;
             case GameHub.LOSS:
                 pool.play(lossSound,  1, 1, 1, 0, 1);
+                GameHub.loss = GameHub.loss + 1;
                 Toast.makeText(this, "YOU LOSE SORRY", Toast.LENGTH_SHORT).show();
                 break;
         }

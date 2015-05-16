@@ -9,6 +9,8 @@ public class GameHub {
 
 
     public static String playerName;
+    public static int win;
+    public static int loss;
 
     public static final int NO_SELECTION = 0;
     public static final int ROCK = 1;

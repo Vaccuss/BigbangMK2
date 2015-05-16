@@ -24,16 +24,16 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
 // All Query strings used by helper saves time etc
 
     private static final String INSERT_QUERY =
-            "INSERT INTO " +TABLE_NAME+ " (name, win, loss, totalGames, winPercentage) " +
+            "INSERT INTO " + TABLE_NAME + " (name, win, loss, totalGames, winPercentage) " +
                     "VALUES (\'%s\', \'%s\', \'%s\', \'%s\', \'%s\');";
 
     private static final String UPDATA_QUERY =
-            "UPDATE " + TABLE_NAME + " SET name = %s, win = %s, loss = %s, totalGames = %s winPercentage = %s WHERE %s";
+            "UPDATE " + TABLE_NAME + " SET name = '%s', win = %s, loss = %s, totalGames = %s, winPercentage = %s WHERE name = '%s'";
 
     private static final String SORT_DATABASE =
             "SELECT * FROM "+ TABLE_NAME + " ORDER BY winPercentage DESC";
 
-    private static final String PLAYER_CHEACK = "SELECT * FROM "+
+    private static final String PLAYER_CHECK = "SELECT * FROM "+
             TABLE_NAME + " WHERE name = '%s'";
 
     public DatabaseOpenHelper(Context context) {
@@ -73,12 +73,13 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
         return check;
     }
 
-    private static void rankDatabase(SQLiteDatabase database){
-        database.execSQL(SORT_DATABASE);
-    }
+
 
 //    ####  Public functions ######
 
+    public static Cursor rankDatabase(SQLiteDatabase database){
+        return database.rawQuery(SORT_DATABASE, null);
+    }
     public static String getTableName() {
         return TABLE_NAME;
     }
@@ -89,15 +90,25 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
         database.execSQL(String.format(INSERT_QUERY, name, win, loss, totalGames, winPercentage));
     }
 
-    public static void upDatePlayer(SQLiteDatabase database, String name, int win, int loss){
+    public static void upDatePlayer(SQLiteDatabase database){
+        String name = GameHub.playerName;
+        int win = GameHub.win;
+        int loss = GameHub.loss;
         int totalGames = win + loss;
-        int rankvalue = win / totalGames * 100;
-        database.execSQL(String.format(UPDATA_QUERY, name, win, loss, totalGames, rankvalue));
+        float rankvalue;
+        if (totalGames != 0) {
+            rankvalue = ((float) win / (float) totalGames) * 100;
+        } else
+            rankvalue = win;
+        Log.i("RANKVALUE", rankvalue + "");
+        Log.i("QUERY", String.format(UPDATA_QUERY, name, win, loss, totalGames, rankvalue, name));
+
+        database.execSQL(String.format(UPDATA_QUERY, name, win, loss, totalGames, rankvalue, name));
         rankDatabase(database);
     }
 
     public static boolean playerCheck (SQLiteDatabase database, String name){
-        Cursor record = database.rawQuery(String.format(PLAYER_CHEACK, name), null);
+        Cursor record = database.rawQuery(String.format(PLAYER_CHECK, name), null);
         Boolean check = false;
         if (record.moveToFirst()){
             check = true;

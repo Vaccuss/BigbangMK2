@@ -5,24 +5,78 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     android:paddingBottom="@dimen/activity_vertical_margin"
     tools:context="com.example.dean.bigbangmk2.Highscore">
-
-    <TextView android:text="@string/hello_world" android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/textView8" />
-
-    <ListView
+    <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/listView"
-        android:layout_alignParentStart="true" />
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Leaderboard"
+        android:textSize="40dp"
+        android:id="@+id/leaderboardTitle"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true" />
 
-    <ListView
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/listView2"
-        android:layout_below="@+id/textView8"
-        android:layout_alignParentStart="true"
-        android:layout_marginStart="201dp"
-        android:layout_marginTop="84dp" />
+        android:layout_below="@+id/leaderboardTitle"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/linearLayout">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:padding="2dp"
+            android:layout_weight="1.5"
+            android:text="RANK"
+            android:textSize="20sp"
+            android:id="@+id/rank" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="3"
+            android:textSize="20sp"
+            android:text="Player"
+            android:id="@+id/name" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight=".9"
+            android:textSize="20sp"
+            android:text="Win"
+            android:id="@+id/win" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Loss"
+            android:textSize="20sp"
+            android:id="@+id/loss" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1.1"
+            android:textSize="20sp"
+            android:text="Total"
+            android:id="@+id/totalScore" />
+
+    </LinearLayout>
+
+
+        <ListView
+            android:layout_width="fill_parent"
+            android:layout_height="406dp"
+            android:id="@+id/scoreList"
+            android:layout_below="@+id/linearLayout"
+            android:layout_alignParentStart="true" />
+
+
+
+
+
 
 </RelativeLayout>
