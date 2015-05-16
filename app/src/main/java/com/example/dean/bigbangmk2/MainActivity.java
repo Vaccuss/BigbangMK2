@@ -1,20 +1,27 @@
 package com.example.dean.bigbangmk2;
 
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.EditText;
 
 
 public class MainActivity extends ActionBarActivity {
+
+    public  DatabaseOpenHelper databaseOpenHelper;
+    public SQLiteDatabase database;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        databaseOpenHelper = new DatabaseOpenHelper(this);
     }
 
 
@@ -42,10 +49,36 @@ public class MainActivity extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 
+
+
+
+
+
+
     public void toSinglePlayer(View view){
+        EditText playerName = (EditText) findViewById(R.id.playerEditText);
+        String name = playerName.getText().toString();
+
+        database = databaseOpenHelper.getWritableDatabase();
+       if (!databaseOpenHelper.playerCheck(database, name)){
+           databaseOpenHelper.addNewPlayer(database, name);
+
+
+
+           GameHub.playerName = name;
+       }
+        Cursor cursor = database.query(true, "HIGHSCORES", null, null, null, null, null, null, null);
+        while (cursor.moveToNext()) {
+            String crstname = cursor.getString(0);
+            String crstdescription = cursor.getString(1);
+            String when = cursor.getString(2);
+            String prtstring = String.format("%s %s %s", crstname, crstdescription, when);
+            Log.i("Item: ", prtstring);
+        }
+        cursor.close();
+        database.close();
         Intent intent = new Intent(this, SingleplayerActivity.class);
         startActivity(intent);
-
     }
 
     public void toMultiplayer(View view){

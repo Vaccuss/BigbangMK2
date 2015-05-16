@@ -6,6 +6,10 @@ package com.example.dean.bigbangmk2;
 
 public class GameHub {
 
+
+
+    public static String playerName;
+
     public static final int NO_SELECTION = 0;
     public static final int ROCK = 1;
     public static final int PAPER = 2;
@@ -81,5 +85,6 @@ public class GameHub {
         return Choice;
 
     }
+
 
 }
