@@ -57,9 +57,6 @@ public class MainActivity extends ActionBarActivity {
         database = databaseOpenHelper.getWritableDatabase();
        if (!databaseOpenHelper.playerCheck(database, name)){
            databaseOpenHelper.addNewPlayer(database, name);
-
-
-
            GameHub.playerName = name;
        }
         Cursor cursor = database.query(true, "HIGHSCORES", null, null, null, null, null, null, null);
