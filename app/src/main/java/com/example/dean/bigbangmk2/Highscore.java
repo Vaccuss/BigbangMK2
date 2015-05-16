@@ -40,11 +40,12 @@ public class Highscore extends ActionBarActivity {
             String playerName = cursor.getString(0);
             String wins = cursor.getString(1);
             String losses = cursor.getString(2);
-            String totalGames = cursor.getString(3);
-            String winpercent = cursor.getString(4);
+            String tie = cursor.getString(3);
+            String totalGames = cursor.getString(4);
+            String winpercent = cursor.getString(5);
             Log.i("INFO", winpercent);
 
-            String[] row = new String[]{playerName,wins,losses,totalGames};
+            String[] row = new String[]{playerName,wins,losses,tie, totalGames};
            players.add(row);
         }
         cursor.close();
@@ -108,6 +109,7 @@ public class Highscore extends ActionBarActivity {
                 TextView name = (TextView) v.findViewById(R.id.name);
                 TextView win = (TextView) v.findViewById(R.id.win);
                 TextView loss = (TextView) v.findViewById(R.id.loss);
+                TextView tie = (TextView) v.findViewById(R.id.tie);
                 TextView total = (TextView) v.findViewById(R.id.totalScore);
 
                 Log.w("fs", (name == null ? "null" : "not"));
@@ -118,7 +120,8 @@ public class Highscore extends ActionBarActivity {
                 name.setText(currentPlayer[0]);
                 win.setText(currentPlayer[1]);
                 loss.setText(currentPlayer[2]);
-                total.setText(currentPlayer[3]);
+                tie.setText(currentPlayer[3]);
+                total.setText(currentPlayer[4]);
             }
 
             return v;

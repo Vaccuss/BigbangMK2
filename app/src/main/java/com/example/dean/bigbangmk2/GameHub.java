@@ -29,6 +29,7 @@ public class GameHub {
     protected static ComparisonStrategy strategy;
 
     protected static int userChoice = NO_SELECTION;
+    public static int tie;
 
     public GameHub(){
 

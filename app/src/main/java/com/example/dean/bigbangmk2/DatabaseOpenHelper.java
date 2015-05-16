@@ -24,11 +24,14 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
 // All Query strings used by helper saves time etc
 
     private static final String INSERT_QUERY =
-            "INSERT INTO " + TABLE_NAME + " (name, win, loss, totalGames, winPercentage) " +
-                    "VALUES (\'%s\', \'%s\', \'%s\', \'%s\', \'%s\');";
+            "INSERT INTO " + TABLE_NAME + " (name, win, loss, tie, totalGames, winPercentage) " +
+                    "VALUES (\'%s\', \'%s\',\'%s\', \'%s\', \'%s\', \'%s\');";
 
-    private static final String UPDATA_QUERY =
-            "UPDATE " + TABLE_NAME + " SET name = '%s', win = %s, loss = %s, totalGames = %s, winPercentage = %s WHERE name = '%s'";
+    private static final String GET_PLAYER_DATA =
+            "SELECT * FROM " + TABLE_NAME + " WHERE name = '%s'";
+
+    private static final String UPDATE_QUERY =
+            "UPDATE " + TABLE_NAME + " SET name = '%s', win = %s, loss = %s, tie = %s, totalGames = %s, winPercentage = %s WHERE name = '%s'";
 
     private static final String SORT_DATABASE =
             "SELECT * FROM "+ TABLE_NAME + " ORDER BY winPercentage DESC";
@@ -60,7 +63,7 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
         if (!doesDatabaseExist(context, TABLE_NAME)) {
             database.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME); //Make sure there are no conflicts
             database.execSQL("CREATE TABLE " + TABLE_NAME +
-                    " (name TEXT, win INT, loss INT, totalGames INT, winPercentage INT);");
+                    " (name TEXT, win INT, loss INT, tie INT, totalGames INT, winPercentage INT);");
         }
     }
     private static boolean doesDatabaseExist(ContextWrapper context, String dbName) {
@@ -77,6 +80,14 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
 
 //    ####  Public functions ######
 
+    public static void pastPlayerScore(SQLiteDatabase database, String name) {
+        Cursor cursor = database.rawQuery(String.format(GET_PLAYER_DATA, name), null);
+        cursor.moveToFirst();
+       GameHub.win = cursor.getInt(1);
+        GameHub.loss = cursor.getInt(2);
+        GameHub.tie = cursor.getInt(3);
+    }
+
     public static Cursor rankDatabase(SQLiteDatabase database){
         return database.rawQuery(SORT_DATABASE, null);
     }
@@ -85,25 +96,27 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
     }
 
     public static void addNewPlayer(SQLiteDatabase database, String name){
-        int win = 0, loss = 0, totalGames = 0;
+        int win = 0, loss = 0, totalGames = 0, tie = 0;
         float winPercentage = 0;
-        database.execSQL(String.format(INSERT_QUERY, name, win, loss, totalGames, winPercentage));
+        database.execSQL(String.format(INSERT_QUERY, name, win, loss, tie, totalGames, winPercentage));
     }
 
     public static void upDatePlayer(SQLiteDatabase database){
         String name = GameHub.playerName;
         int win = GameHub.win;
         int loss = GameHub.loss;
-        int totalGames = win + loss;
+        int tie = GameHub.tie;
+        int totalGames = win + loss + tie;
         float rankvalue;
+        int winlossValue = win + loss;
         if (totalGames != 0) {
-            rankvalue = ((float) win / (float) totalGames) * 100;
+            rankvalue = ((float) win / (float) winlossValue) * 100;
         } else
             rankvalue = win;
         Log.i("RANKVALUE", rankvalue + "");
-        Log.i("QUERY", String.format(UPDATA_QUERY, name, win, loss, totalGames, rankvalue, name));
+        Log.i("QUERY", String.format(UPDATE_QUERY, name, win, loss, tie, totalGames, rankvalue, name));
 
-        database.execSQL(String.format(UPDATA_QUERY, name, win, loss, totalGames, rankvalue, name));
+        database.execSQL(String.format(UPDATE_QUERY, name, win, loss, tie, totalGames, rankvalue, name));
         rankDatabase(database);
     }
 

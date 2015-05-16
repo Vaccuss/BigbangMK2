@@ -53,12 +53,13 @@ public class MainActivity extends ActionBarActivity {
     public void toSinglePlayer(View view){
         EditText playerName = (EditText) findViewById(R.id.playerEditText);
         String name = playerName.getText().toString();
-        GameHub.playerName = name;
-        database = databaseOpenHelper.getWritableDatabase();
-       if (!databaseOpenHelper.playerCheck(database, name)){
-           databaseOpenHelper.addNewPlayer(database, name);
 
+        database = databaseOpenHelper.getWritableDatabase();
+       if (!DatabaseOpenHelper.playerCheck(database, name)){
+           DatabaseOpenHelper.addNewPlayer(database, name);
        }
+        GameHub.playerName = name;
+        Log.i("playername:", GameHub.playerName);
         Cursor cursor = database.query(true, "HIGHSCORES", null, null, null, null, null, null, null);
         while (cursor.moveToNext()) {
             String crstname = cursor.getString(0);

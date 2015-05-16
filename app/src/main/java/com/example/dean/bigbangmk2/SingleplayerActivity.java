@@ -56,6 +56,12 @@ public class SingleplayerActivity extends ActionBarActivity  implements SensorEv
         tieSound = pool.load(this, R.raw.youtie, 1);
         winSound = pool.load(this, R.raw.youwin, 1);
 
+        databaseOpenHelper = new DatabaseOpenHelper(this);
+        database = databaseOpenHelper.getWritableDatabase();
+
+        DatabaseOpenHelper.pastPlayerScore(database, GameHub.playerName);
+
+        database.close();
 
     }
     @Override
@@ -66,10 +72,11 @@ public class SingleplayerActivity extends ActionBarActivity  implements SensorEv
         senSensorManager.unregisterListener(this);
         databaseOpenHelper = new DatabaseOpenHelper(this);
         database = databaseOpenHelper.getWritableDatabase();
-        databaseOpenHelper.upDatePlayer(database);
+        DatabaseOpenHelper.upDatePlayer(database);
         database.close();
         GameHub.loss = 0;
         GameHub.win = 0;
+        GameHub.tie = 0;
         GameHub.playerName = "";
     }
 
@@ -132,7 +139,7 @@ public class SingleplayerActivity extends ActionBarActivity  implements SensorEv
                     pool.play(gestureCompleate,  1, 1, 1, 0, 1);
                     Toast.makeText(this, "SHAKE: " + Integer.toString(counter), Toast.LENGTH_SHORT).show();
                     if (counter == 3){
-                        Log.d("GAME PLAYED", Integer.toString(counter));
+                        Log.i("GAME PLAYED", Integer.toString(counter));
                         gameChoice();
                        counter = 0;
                     }
@@ -182,6 +189,7 @@ public class SingleplayerActivity extends ActionBarActivity  implements SensorEv
                 break;
             case GameHub.TIE:
                 pool.play(tieSound,  1, 1, 1, 0, 1);
+                GameHub.tie = GameHub.tie + 1;
                 Toast.makeText(this, "YOU TIE WITH COMPUTER", Toast.LENGTH_SHORT).show();
                 break;
             case GameHub.LOSS:
@@ -206,5 +214,4 @@ public class SingleplayerActivity extends ActionBarActivity  implements SensorEv
         }
 
     }
-
 }
