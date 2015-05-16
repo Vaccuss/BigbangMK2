@@ -50,11 +50,6 @@ public class MainActivity extends ActionBarActivity {
     }
 
 
-
-
-
-
-
     public void toSinglePlayer(View view){
         EditText playerName = (EditText) findViewById(R.id.playerEditText);
         String name = playerName.getText().toString();
