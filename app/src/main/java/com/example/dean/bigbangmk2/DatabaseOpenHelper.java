@@ -36,6 +36,8 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
         super(context, TABLE_NAME, null, version);
     }
 
+    private static final String PLAYER_CHEACK = "SELECT 1 FROM"+
+            TABLE_NAME + "WHERE name = %s";
 
 
     @Override
@@ -82,7 +84,14 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
         rankDatabase(database);
     }
 
-
+    public static boolean playerCheck (SQLiteDatabase database, String name){
+        Cursor record = database.rawQuery(String.format(PLAYER_CHEACK, name), null);
+        Boolean check = false;
+        if (record.moveToFirst()){
+            check = true;
+        }
+        return check;
+    }
 
 
 }
