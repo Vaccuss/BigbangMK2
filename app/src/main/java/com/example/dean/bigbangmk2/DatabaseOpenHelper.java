@@ -20,20 +20,17 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
     private static String TABLE_NAME = "HIGHSCORES";
     ContextWrapper context;
 
-//    Creates a new row (Defines the columns that are being inserted) Values (the columns values)
-//    INSERT INTO "TABLE NAME" then next
+// All Query strings used by helper saves time etc
+
     private static final String INSERT_QUERY =
             "INSERT INTO" +TABLE_NAME+ "(name TEXT, win INT, loss INT, totalGames INT, winPercentage REAL) " +
                     "VALUES (\'%s\', \'%s\', \'%s\', \'%s\', \'%s\');";
 
-//    UPDATE table_name
-//    SET column1=value1,column2=value2,..
-//    WHERE some_column=some_value;.
-
     private static final String UPDATA_QUERY =
             "UPDATE" + TABLE_NAME + "SET name = %s, win = %s, loss = %s, totalGames = %s winPercentage = %s WHERE %s";
-    private static final String SORT_DATABASE = "SELECT * FROM"+ TABLE_NAME + " ORDER BY winPercentage DESC";
 
+    private static final String SORT_DATABASE =
+            "SELECT * FROM"+ TABLE_NAME + " ORDER BY winPercentage DESC";
 
     public DatabaseOpenHelper(Context context) {
         super(context, TABLE_NAME, null, version);
@@ -76,7 +73,6 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
         int win = 0, loss = 0, totalGames = 0;
         float winPercentage = 0;
         database.execSQL(String.format(INSERT_QUERY, name, win, loss, totalGames, winPercentage));
-
     }
 
     public static void upDatePlayer(SQLiteDatabase database, String name, int win, int loss){
