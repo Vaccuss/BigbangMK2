@@ -90,7 +90,12 @@ public class GameHub {
 
         } else if (AiRandomNum == 3) {
             Choice = SICSSOR;
+        } else if (AiRandomNum == 4) {
+            Choice = LIZARD;
+        } else if (AiRandomNum == 5) {
+            Choice = SPOCK;
         }
+
         return Choice;
 
     }
