@@ -7,7 +7,6 @@ package com.example.dean.bigbangmk2;
 public class GameHub {
 
 
-
     public static String playerName;
     public static int win;
     public static int loss;
@@ -58,6 +57,13 @@ public class GameHub {
                 break;
             case SICSSOR:
                 setStrategy(new SicssorComparisionStratergy());
+                break;
+            case LIZARD:
+                setStrategy(new LizardComparisionStratergy());
+                break;
+            case SPOCK:
+                setStrategy(new SpockComparisonStratergy());
+                break;
         }
 
 
