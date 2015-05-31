@@ -5,11 +5,16 @@ import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.IntentFilter;
+import android.net.wifi.p2p.WifiP2pDeviceList;
 import android.net.wifi.p2p.WifiP2pManager;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class MultiplayerActivity extends ActionBarActivity {
@@ -18,6 +23,10 @@ public class MultiplayerActivity extends ActionBarActivity {
     WifiP2pManager.Channel mChannel;
     BroadcastReceiver mReceiver;
     IntentFilter mIntentFilter;
+    WifiP2pManager.PeerListListener myPeerListListener;
+
+    private List peers = new ArrayList();
+    public boolean successState;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,14 +44,17 @@ public class MultiplayerActivity extends ActionBarActivity {
         mManager.discoverPeers(mChannel, new WifiP2pManager.ActionListener() {
             @Override
             public void onSuccess() {
-                
+                successState = true;
+                Log.i ("Hello:", "success bitch");
             }
 
             @Override
             public void onFailure(int reasonCode) {
-
+                successState = false;
+                Log.i ("Hello:", "Done fucked up");
             }
         });
+
 
     }
 
@@ -59,8 +71,6 @@ public class MultiplayerActivity extends ActionBarActivity {
         unregisterReceiver(mReceiver);
 
     }
-
-
 
 
     @Override
