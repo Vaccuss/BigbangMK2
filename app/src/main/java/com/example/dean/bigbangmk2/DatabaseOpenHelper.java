@@ -31,7 +31,8 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
             "SELECT * FROM " + TABLE_NAME + " WHERE name = '%s'";
 
     private static final String UPDATE_QUERY =
-            "UPDATE " + TABLE_NAME + " SET name = '%s', win = %s, loss = %s, tie = %s, totalGames = %s, winPercentage = %s WHERE name = '%s'";
+            "UPDATE " + TABLE_NAME + " SET name = '%s', win = %s, loss = %s, tie = %s, totalGames =" +
+                    " %s, winPercentage = %s WHERE name = '%s'";
 
     private static final String SORT_DATABASE =
             "SELECT * FROM "+ TABLE_NAME + " ORDER BY winPercentage DESC";
