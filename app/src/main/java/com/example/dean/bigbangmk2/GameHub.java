@@ -37,7 +37,7 @@ public class GameHub {
     //check that there is a strategy applied default is ROCK
     protected static ComparisonStrategy getStrategy(){
         if (strategy == null){
-            strategy = new RockComparisionStratergy();
+            strategy = new ComparisonStrategy.RockComparisionStratergy();
         }
         return strategy;
     }
@@ -50,19 +50,19 @@ public class GameHub {
         userChoice = NewuserChoice;
         switch (userChoice){
             case ROCK:
-                setStrategy(new RockComparisionStratergy());
+                setStrategy(new ComparisonStrategy.RockComparisionStratergy());
                 break;
             case PAPER:
-                setStrategy(new PaperComparisionStratergy());
+                setStrategy(new ComparisonStrategy.PaperComparisionStratergy());
                 break;
             case SICSSOR:
-                setStrategy(new SicssorComparisionStratergy());
+                setStrategy(new ComparisonStrategy.SicssorComparisionStratergy());
                 break;
             case LIZARD:
-                setStrategy(new LizardComparisionStratergy());
+                setStrategy(new ComparisonStrategy.LizardComparisionStratergy());
                 break;
             case SPOCK:
-                setStrategy(new SpockComparisonStratergy());
+                setStrategy(new ComparisonStrategy.SpockComparisonStratergy());
                 break;
         }
 
